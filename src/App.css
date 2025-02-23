@@ -1,0 +1,70 @@
+.App {
+  text-align: center;
+  padding: 50px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #4a4a4a;
+}
+
+.think-content {
+  border-left: 3px solid gray;
+  padding-left: 10px;
+  box-sizing: border-box;
+}
+
+.think-title {
+  margin: 0;
+  width: 100%;
+  color: grey;
+  text-align: left;
+}
+
+.think-text {
+  margin: 0;
+  font-size: 12px;
+  width: 100%;
+  color: grey;
+  text-align: left;
+}
+
+.result-content {
+  margin-top: 15px;
+}
+
+input {
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.fortune-result {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fortune-result h2 {
+  color: #007bff;
+}
