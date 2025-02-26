@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Collapse, DatePicker, Input, Radio } from 'antd'
+import { Collapse, DatePicker, Input, message, Radio } from 'antd'
 import { Typography } from '@mui/material';
 import dayjs from 'dayjs'
+import remarkGfm from 'remark-gfm';
+import ReactMarkdown from 'react-markdown'
+import rehypeHighlight from 'rehype-highlight';
+import 'highlight.js/styles/github.css';
 import './App.css';
+
+const testT = 'bce-v3/ALTAK-6zsSZn5jbbt9EFkzBK5y3/7c36466da019b94d8b49e2421196759f879db75f;ZjkyZmQ2YmQxZTQ3NDcyNjk0ZTg1ZjYyYjlkZjNjODB8AAAAABMCAACEfuFxGWqkAiTGm7PW93BUVb7itJ2Hy1dmrmfitY9y3nIadX234mgr+OV7HnRZny5ncO5mzeRVT7JAQTdHnYip3EYbxnM0+vB4dKAV5z/tFmXUXz0zVS620eWGUEDpRBXQTXgtL1euS6NPaZD3S+Pq7kcH/pm75mgXbp1e9d6kVneJqU9oTRO/phI9Utafs+u3abF1ueyNXZqFwORFaaDKBLc0AdV6aTh1Gbs1DmmBBCzMnhBwS4ALs97Z189zBg2X9JCZ3wFrXJKPUCXeubKzgIGArwgdU7jQMMwwjEm3QCjtb+fFy/Tx06lJ1S8BGKt+rdUP4CQzvrVU736bUMAM93xC09Zha7Z1k3f9Q/sRiBs/0W6qp3Qv99obK+OiD3naIO51e+DyuDS2Skr96VseFJvvO+pq+I3oX5yc0vuENEB2FNEQfeuUzdKdkjgx77Q='
 
 function App() {
   const [readable, setReadable] = useState('false')
@@ -14,6 +20,8 @@ function App() {
   const [fortune, setFortune] = useState(''); // 算命结果
   const [loading, setLoading] = useState(false); // 加载状态
 
+  const CyberToken = localStorage.getItem('CyberToken') ?? testT
+
   const streamDeepSeek = async (callback) => {
     setThink('')
     setFortune('')
@@ -22,7 +30,7 @@ function App() {
       const response = await fetch('https://qianfan.baidubce.com/v2/chat/completions', {
         method: 'POST',
         headers: {
-          Authorization: 'Bearer bce-v3/ALTAK-6zsSZn5jbbt9EFkzBK5y3/7c36466da019b94d8b49e2421196759f879db75f;ZjkyZmQ2YmQxZTQ3NDcyNjk0ZTg1ZjYyYjlkZjNjODB8AAAAABMCAACEfuFxGWqkAiTGm7PW93BUVb7itJ2Hy1dmrmfitY9y3nIadX234mgr+OV7HnRZny5ncO5mzeRVT7JAQTdHnYip3EYbxnM0+vB4dKAV5z/tFmXUXz0zVS620eWGUEDpRBXQTXgtL1euS6NPaZD3S+Pq7kcH/pm75mgXbp1e9d6kVneJqU9oTRO/phI9Utafs+u3abF1ueyNXZqFwORFaaDKBLc0AdV6aTh1Gbs1DmmBBCzMnhBwS4ALs97Z189zBg2X9JCZ3wFrXJKPUCXeubKzgIGArwgdU7jQMMwwjEm3QCjtb+fFy/Tx06lJ1S8BGKt+rdUP4CQzvrVU736bUMAM93xC09Zha7Z1k3f9Q/sRiBs/0W6qp3Qv99obK+OiD3naIO51e+DyuDS2Skr96VseFJvvO+pq+I3oX5yc0vuENEB2FNEQfeuUzdKdkjgx77Q=',
+          Authorization: `Bearer ${CyberToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -32,6 +40,10 @@ function App() {
           stream: true,
         })
       });
+
+      if (response.status !== 200) {
+        message.error('我丢')
+      }
 
       const reader = response?.body?.getReader();
       const decoder = new TextDecoder();
@@ -53,6 +65,8 @@ function App() {
         }
       }
     } catch (error) {
+      console.debug(error)
+      message.error(error)
       if (error?.name !== 'AbortError') {
         console.error(' 流式请求异常:', error);
         setLoading(false)
@@ -140,9 +154,12 @@ function App() {
             items={[{ key: '1', label: <p className='think-title'>赛博掐指中：</p>, children: <p className='think-text'>{think}</p> }]}
           />
           <div className='result-content'>
-            <Typography className="response-box" variant="body1" sx={{ mt: 2, whiteSpace: 'pre-wrap' }}>
+            <ReactMarkdown remarkPlugins={[remarkGfm, rehypeHighlight]}>
               {fortune}
-            </Typography>
+            </ReactMarkdown>
+            {/* <Typography className="response-box" variant="body1" sx={{ mt: 2, whiteSpace: 'pre-wrap' }}>
+              {fortune}
+            </Typography> */}
           </div>
         </div>
       )}
