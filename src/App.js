@@ -20,7 +20,7 @@ function App() {
       const response = await fetch('https://qianfan.baidubce.com/v2/chat/completions', {
         method: 'POST',
         headers: {
-          Authorization: 'Bearer bce-v3/ALTAK-iJIh7DqiD4LRhdUoCCday/4b895f8185df86eda961e820e676232cbf9cd8b2;ZjkyZmQ2YmQxZTQ3NDcyNjk0ZTg1ZjYyYjlkZjNjODB8AAAAABMCAABjEgcYbR72X3LRulN1v25GpUA/n3DNhh3pUEwyYQeBnf+GiBwKyBCFo2WzCa4KqhBeaGr9hHJvp8CYvJCPn8ZC//6BysHJUr6kUmA4ISmFCXO/x72FiL0IIkcZsvABtB7FctfWNAhmgpO9nJFoqICD4ZKTrXSAYxgoyLfTA4jvb4P5NXyaYBtjNgtv320+Cc7YWEjVwFxkiKpk/bw1YpcJyaGpP7qUk6wfxGPY3BTd3a0TK9c1jeGv5RdYcLuBsMdsXzEqLW5PrDbymgOQyq0xAUKv6UIDLIEZOWTRBvC8BCrIyu5OAv3/XBr6+i87btcQFvFuRG+tTpfapujglmXebYP03m84rUPYJbQ0VD8Aa9Y5F0yk2kaTkyjcWXXZw6bA5du1tVn30E7bhpdPVr+0cgD3vRGY17BUkJsnzqsjIytMVMjH4oLpXpEWciwL5pw=',
+          Authorization: 'Bearer bce-v3/ALTAK-6zsSZn5jbbt9EFkzBK5y3/7c36466da019b94d8b49e2421196759f879db75f;ZjkyZmQ2YmQxZTQ3NDcyNjk0ZTg1ZjYyYjlkZjNjODB8AAAAABMCAACEfuFxGWqkAiTGm7PW93BUVb7itJ2Hy1dmrmfitY9y3nIadX234mgr+OV7HnRZny5ncO5mzeRVT7JAQTdHnYip3EYbxnM0+vB4dKAV5z/tFmXUXz0zVS620eWGUEDpRBXQTXgtL1euS6NPaZD3S+Pq7kcH/pm75mgXbp1e9d6kVneJqU9oTRO/phI9Utafs+u3abF1ueyNXZqFwORFaaDKBLc0AdV6aTh1Gbs1DmmBBCzMnhBwS4ALs97Z189zBg2X9JCZ3wFrXJKPUCXeubKzgIGArwgdU7jQMMwwjEm3QCjtb+fFy/Tx06lJ1S8BGKt+rdUP4CQzvrVU736bUMAM93xC09Zha7Z1k3f9Q/sRiBs/0W6qp3Qv99obK+OiD3naIO51e+DyuDS2Skr96VseFJvvO+pq+I3oX5yc0vuENEB2FNEQfeuUzdKdkjgx77Q=',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
