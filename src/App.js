@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Collapse } from 'antd'
+import { Collapse, DatePicker, Input, Button } from 'antd'
 import { Typography } from '@mui/material';
 import './App.css';
 
@@ -12,9 +12,10 @@ function App() {
   const [fortune, setFortune] = useState(''); // 算命结果
   const [loading, setLoading] = useState(false); // 加载状态
 
-  const streamDeepSeek = async (prompt, callback) => {
+  const streamDeepSeek = async (callback) => {
     setThink('')
     setFortune('')
+    setDate()
     setLoading(true)
     try {
       const response = await fetch('https://qianfan.baidubce.com/v2/chat/completions', {
@@ -65,10 +66,7 @@ function App() {
       let fullResponse = '';
       let fullThink = ''
 
-      await streamDeepSeek({
-        name: input,
-        date: date,
-      }, (think, text) => {
+      await streamDeepSeek((think, text) => {
         if (think) {
           fullThink += think
           setThink(fullThink);
@@ -86,31 +84,38 @@ function App() {
 
   return (
     <div className="App">
-      <h1>赛博算命大师</h1>
-      <p>输入你的生日（格式：YYYY-MM-DD）和姓名，让赛博大师为你揭示命运！</p>
+      <h1>Cyber算命大师</h1>
+      <p>让Cyber大师为你揭示命运！</p>
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={gender}
-          onChange={(e) => setGender(e.target.value)}
-          placeholder="请输入性别"
-          disabled={loading}
-        />
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="请输入姓名"
-          disabled={loading}
-        />
-        <input
-          type="text"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          placeholder="请输入生日"
-          disabled={loading}
-        />
+        <div className='form-content'>
+          <Input
+            style={{ width: 260, height: 35 }}
+            size='small'
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            placeholder="请输入性别"
+            disabled={loading}
+          />
+          <Input
+            style={{ width: 260, height: 35 }}
+            size='small'
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="请输入姓名"
+            disabled={loading}
+          />
+          <DatePicker
+            disabled={loading}
+            style={{ width: 260, height: 35 }}
+            size='small'
+            showTime
+            placeholder='请输入生辰'
+            onChange={(value, dateString) => {
+              setDate(dateString)
+            }}
+          />
+        </div>
         <button type="submit" disabled={loading}>
           {loading ? '正在算命...' : '开始算命'}
         </button>
