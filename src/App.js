@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Collapse, DatePicker, Input, Button } from 'antd'
+import React, { useEffect, useState } from 'react';
+import { Collapse, DatePicker, Input, Radio } from 'antd'
 import { Typography } from '@mui/material';
+import dayjs from 'dayjs'
 import './App.css';
 
 function App() {
-  const [date, setDate] = useState('');
+  const [readable, setReadable] = useState('false')
+  const [date, setDate] = useState();
   const [gender, setGender] = useState('')
   const [activeKey, setActiveKey] = useState('1')
   const [input, setInput] = useState(''); // 用户输入（生日或姓名）
@@ -15,7 +17,6 @@ function App() {
   const streamDeepSeek = async (callback) => {
     setThink('')
     setFortune('')
-    setDate()
     setLoading(true)
     try {
       const response = await fetch('https://qianfan.baidubce.com/v2/chat/completions', {
@@ -26,8 +27,8 @@ function App() {
         },
         body: JSON.stringify({
           model: 'deepseek-r1',
-          prompt: `我的名字是${input}，性别是${gender}，出生日期是${date}，帮我算命，严格按照八字和命理，请以中文输出一段神秘而有趣的描述。`,
-          messages: [{ role: 'user', content: `我的名字是${input}，性别是${gender}，出生日期是${date}，帮我算命，严格按照八字和命理，请以中文输出一段神秘而有趣的描述。` }],
+          prompt: `我的名字是${input}，性别是${gender}，出生日期是${dayjs(date).format('YYYY-MM-DD hh:mm:ss')}，给出基础命局、性格与运势、发展建议，严格按照八字和命理，${readable === 'true' ? '必须回答的通俗易懂' : '请以中文输出一段神秘而有趣的描述'}。`,
+          messages: [{ role: 'user', content: `我的名字是${input}，性别是${gender}，出生日期是${date}，给出基础命局、性格与运势、发展建议，严格按照八字和命理，${readable === 'true' ? '必须回答的通俗易懂' : '请以中文输出一段神秘而有趣的描述'}。` }],
           stream: true,
         })
       });
@@ -62,7 +63,7 @@ function App() {
   // 处理表单提交
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (input.trim() && date.trim() && gender.trim()) {
+    if (input.trim() && date && gender.trim()) {
       let fullResponse = '';
       let fullThink = ''
 
@@ -107,18 +108,26 @@ function App() {
           />
           <DatePicker
             disabled={loading}
+            value={date}
             style={{ width: 260, height: 35 }}
             size='small'
             showTime
             placeholder='请输入生辰'
             onChange={(value, dateString) => {
-              setDate(dateString)
+              setDate(value)
             }}
           />
         </div>
-        <button type="submit" disabled={loading}>
-          {loading ? '正在算命...' : '开始算命'}
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+          <Radio.Group disabled={loading} value={readable} block options={[{
+            label: <span style={{ display: 'inline-block', width: '100%', userSelect: 'none' }} onClick={() => {
+              setReadable((pre) => pre === 'true' ? 'false' : 'true')
+            }}>通俗易懂模式</span>, value: 'true'
+          }]} defaultValue="Pear" optionType="button" onChange={(val) => console.debug(val)} />
+          <button type="submit" disabled={loading}>
+            {loading ? '正在算命...' : '开始算命'}
+          </button>
+        </div>
       </form>
 
       {(think || fortune) && (
